@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alerta temprana – crecidas Arroyo Escobar</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #121212;
+        color: #eee;
+      }
+      .result {
+        background: #1e1e1e;
+        color: #fff;
+      }
+    }
+
+    @media (prefers-color-scheme: light) {
+      body {
+        background: #f0f0f0;
+        color: #333;
+      }
+      .result {
+        background: #fff;
+        color: #000;
+      }
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 5px;
+    }
+
+    .alerta {
+      color: red;
+      font-weight: bold;
+    }
+
+    .info {
+      font-size: 13px;
+      margin: 15px 0;
+      padding: 10px;
+      background: rgba(0,0,0,0.05);
+      border-left: 3px solid #888;
+      line-height: 1.4;
+    }
+
+    .info ul {
+      padding-left: 20px;
+      margin: 5px 0;
+    }
+
+    pre {
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.4;
+      background: rgba(0,0,0,0.03);
+      padding: 10px;
+      white-space: pre-wrap;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      text-align: center;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Alerta temprana – crecidas Arroyo Escobar</h1>
+
+  <div class="info">
+    ℹ️ <strong>Cómo usar esta app:</strong><br />
+    Ingresá la <strong>hora en que finaliza la lluvia</strong> y la <strong>altura del arroyo</strong> en ese momento. El modelo estima la crecida y posibles afectaciones.<br /><br />
+    <strong>Niveles típicos del arroyo:</strong>
+    <ul>
+      <li>1,30 m: nivel normal</li>
+      <li>2,60 m: medio cauce</li>
+      <li>3,10 m: ¾ de cauce</li>
+      <li>3,60 m: cauce lleno</li>
+      <li>4,00 m+: comienza a afectar patios y casas</li>
+    </ul>
+    Este modelo es útil <strong>durante la lluvia</strong> como alerta rápida. No calcula acumulación, sino comportamiento del agua ya en crecida.
+  </div>
+
+  <label for="horaLluvia">Hora fin de lluvia:</label>
+  <select id="horaLluvia">
+    ${[...Array(24).keys()].map(h => `<option value="${h}">${h}:00 hs</option>`).join('')}
+  </select>
+
+  <label for="alturaInicial">Altura del arroyo (m):</label>
+  <select id="alturaInicial">
+    ${Array.from({length: 53}, (_, i) => (i * 0.1).toFixed(2)).map(h => `<option value="${h}">${h} m</option>`).join('')}
+  </select>
+
+  <button onclick="calcular()">Calcular Crecida</button>
+
+  <div class="result" id="salida"></div>
+
+  <footer>Creado por guardianesarroyosba</footer>
+
+  <script>
+    function calcular() {
+      const horaLluvia = parseFloat(document.getElementById('horaLluvia').value);
+      const alturaInicial = parseFloat(document.getElementById('alturaInicial').value);
+
+      if (isNaN(horaLluvia) || isNaN(alturaInicial)) {
+        alert("Por favor, complete todos los campos correctamente.");
+        return;
+      }
+
+      const alturaMaxima = alturaInicial + 1;
+      const horaPico = (horaLluvia + 9.5) % 24;
+      const horaInicioBajada = (horaPico + 0.5) % 24;
+      const horaFinBajada = (horaInicioBajada + 5.5) % 24;
+
+      const puntosCriticos = [
+        { nombre: "Terrenos bajos y calles", nivel: 3.70 },
+        { nombre: "Casa 1", nivel: 4.10 },
+        { nombre: "Casa 2", nivel: 4.25 },
+        { nombre: "Casa 3", nivel: 4.50 },
+        { nombre: "Casa 4", nivel: 4.80 },
+        { nombre: "Ruta 9", nivel: 5.20 }
+      ];
+
+      function formatoHora(h) {
+        const horas = Math.floor(h);
+        const minutos = (h % 1) >= 0.5 ? '30' : '00';
+        return `${horas}:${minutos}`;
+      }
+
+      function barra(altura) {
+        const bloques = Math.round(altura * 2); // cada 0.5 m = 1 bloque
+        return '🟦'.repeat(bloques);
+      }
+
+      let salida = `
+        <p>🌧️ Hora fin de lluvia: ${formatoHora(horaLluvia)} hs</p>
+        <p>📏 Altura inicial: ${alturaInicial.toFixed(2)} m</p>
+        <p>📈 Altura máxima estimada: ${alturaMaxima.toFixed(2)} m</p>
+        <p>⏱️ Llegará al pico a las ${formatoHora(horaPico)} hs</p>
+        <p>🔽 Comienza a bajar a las ${formatoHora(horaInicioBajada)} hs</p>
+        <p>✅ Nivel vuelve a la normalidad a las ${formatoHora(horaFinBajada)} hs</p>
+        <hr>
+        <p><strong>🔔 Alertas:</strong></p>
+      `;
+
+      let alertaEmitida = false;
+
+      puntosCriticos.forEach(p => {
+        if (alturaMaxima >= p.nivel) {
+          const inicio = formatoHora(horaPico);
+          const fin = formatoHora((horaPico + 0.5) % 24);
+          salida += `<p class="alerta">⚠️ ${p.nombre} será alcanzada entre las ${inicio} y ${fin} hs</p>`;
+          alertaEmitida = true;
+        }
+      });
+
+      if (!alertaEmitida) {
+        salida += `<p>✅ No se espera que ninguna casa ni la ruta sean alcanzadas.</p>`;
+      }
+
+      // Evolución simple en bloques visuales (gráfico)
+      salida += `<hr><p><strong>📊 Evolución de altura:</strong></p><pre>`;
+
+      const pasos = 6;
+      const intervalo = 1;
+      for (let i = 0; i <= pasos; i++) {
+        const hora = (horaPico - 1.5 + i * 0.5 + 24) % 24;
+        const altura = alturaInicial + Math.max(0, 1 - Math.abs(i - pasos / 2) * 0.4);
+        salida += `${formatoHora(hora)} → ${barra(altura)} ${altura.toFixed(2)} m\n`;
+      }
+
+      salida += `</pre>`;
+
+      document.getElementById('salida').innerHTML = salida;
+    }
+
+    // Generar opciones de selects (solo si usás ${...} dentro del HTML)
+    window.onload = () => {
+      document.getElementById('horaLluvia').innerHTML =
+        [...Array(24).keys()].map(h => `<option value="${h}">${h}:00 hs</option>`).join('');
+      document.getElementById('alturaInicial').innerHTML =
+        Array.from({length: 53}, (_, i) => (i * 0.1).toFixed(2))
+        .map(h => `<option value="${h}">${h} m</option>`).join('');
+    };
+  </script>
+</body>
+</html>
