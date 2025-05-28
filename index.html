@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alerta temprana Arroyo Escobar v.1.1</title>
+  <title>Alerta Temprana - Arroyo Escobar v.1</title>
   <style>
     body {
       font-family: sans-serif;
@@ -22,6 +22,10 @@
         background: #1e1e1e;
         color: #fff;
       }
+      .niveles span {
+        background: #333;
+        color: #eee;
+      }
     }
 
     @media (prefers-color-scheme: light) {
@@ -31,6 +35,10 @@
       }
       .result {
         background: #fff;
+        color: #000;
+      }
+      .niveles span {
+        background: #ccc;
         color: #000;
       }
     }
@@ -67,9 +75,18 @@
       line-height: 1.4;
     }
 
-    .info ul {
-      padding-left: 20px;
-      margin: 5px 0;
+    .niveles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .niveles span {
+      padding: 4px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
     }
 
     pre {
@@ -93,32 +110,28 @@
 </head>
 <body>
 
-  <h1>Alerta temprana Arroyo Escobar v.1</h1>
+  <h1>Alerta Temprana - crecida Arroyo Escobar v.1</h1>
 
   <div class="info">
     ℹ️ <strong>Cómo usar esta app:</strong><br />
     Ingresá la <strong>hora en que finaliza la lluvia</strong> y la <strong>altura del arroyo</strong> en ese momento. El modelo estima la crecida y posibles afectaciones.<br /><br />
     <strong>Niveles típicos del arroyo:</strong>
-    <ul>
-      <li>1,30 m: nivel normal</li> 
-        <li>2,60 m: medio cauce</li>
-      <li>3,10 m: ¾ de cauce</li>  
-        <li>3,60 m: cauce lleno</li>
-      <li>4,00 m+: comienza a afectar patios y casas</li>
-        
-    </ul>
+    <div class="niveles">
+      <span>1,30 m: normal</span>
+      <span>2,60 m: medio</span>
+      <span>3,10 m: ¾ cauce</span>
+      <span>3,60 m: lleno</span>
+        <span>3,70 m+: terrenos ribereños</span>
+      <span>4,00 m+: patios/casas</span>
+    </div>
     Este modelo es útil <strong>durante la lluvia</strong> como alerta rápida. No calcula acumulación, sino comportamiento del agua ya en crecida.
   </div>
 
   <label for="horaLluvia">Hora fin de lluvia:</label>
-  <select id="horaLluvia">
-    ${[...Array(24).keys()].map(h => `<option value="${h}">${h}:00 hs</option>`).join('')}
-  </select>
+  <select id="horaLluvia"></select>
 
   <label for="alturaInicial">Altura del arroyo (m):</label>
-  <select id="alturaInicial">
-    ${Array.from({length: 53}, (_, i) => (i * 0.1).toFixed(2)).map(h => `<option value="${h}">${h} m</option>`).join('')}
-  </select>
+  <select id="alturaInicial"></select>
 
   <button onclick="calcular()">Calcular Crecida</button>
 
@@ -203,7 +216,7 @@
       document.getElementById('salida').innerHTML = salida;
     }
 
-    // Generar opciones de selects (solo si usás ${...} dentro del HTML)
+    // Cargar opciones al iniciar
     window.onload = () => {
       document.getElementById('horaLluvia').innerHTML =
         [...Array(24).keys()].map(h => `<option value="${h}">${h}:00 hs</option>`).join('');
