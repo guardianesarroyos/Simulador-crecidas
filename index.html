@@ -3,117 +3,264 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador Crecida - Arroyo Escobar v.1</title>
+  <title>Simulador Crecida - Arroyo Escobar v.2</title>
   <style>
+    :root {
+      --orange: #f97316;
+      --orange-light: #fb923c;
+      --orange-dark: #ea580c;
+      --green: #16a34a;
+      --green-light: #22c55e;
+      --gray-900: #111827;
+      --gray-800: #1f2937;
+      --gray-700: #374151;
+      --gray-600: #4b5563;
+      --gray-300: #d1d5db;
+      --gray-200: #e5e7eb;
+      --gray-100: #f3f4f6;
+    }
+
     body {
-      font-family: sans-serif;
-      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 16px;
       max-width: 500px;
       margin: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       transition: background 0.3s, color 0.3s;
     }
 
     @media (prefers-color-scheme: dark) {
       body {
-        background: #121212;
-        color: #eee;
+        background: var(--gray-900);
+        color: #f8fafc;
       }
       .result {
-        background: #1e1e1e;
-        color: #fff;
+        background: var(--gray-800);
+        border: 1px solid var(--gray-700);
+        color: #f8fafc;
       }
       .niveles span {
-        background: #333;
-        color: #eee;
+        background: var(--gray-700);
+        color: var(--orange-light);
+        border: 1px solid var(--gray-600);
+      }
+      select, button {
+        background: var(--gray-800);
+        color: #f8fafc;
+        border: 1px solid var(--gray-600);
+      }
+      .info {
+        background: var(--gray-800);
+        border-left: 3px solid var(--orange);
+      }
+      pre {
+        background: var(--gray-800);
+        border: 1px solid var(--gray-700);
       }
     }
 
     @media (prefers-color-scheme: light) {
       body {
-        background: #f0f0f0;
-        color: #333;
+        background: var(--gray-100);
+        color: var(--gray-900);
       }
       .result {
-        background: #fff;
-        color: #000;
+        background: white;
+        border: 1px solid var(--gray-300);
+        color: var(--gray-900);
       }
       .niveles span {
-        background: #ccc;
-        color: #000;
+        background: var(--gray-100);
+        color: var(--green);
+        border: 1px solid var(--gray-300);
+      }
+      select, button {
+        background: white;
+        color: var(--gray-900);
+        border: 1px solid var(--gray-300);
+      }
+      .info {
+        background: var(--gray-100);
+        border-left: 3px solid var(--green);
+      }
+      pre {
+        background: var(--gray-100);
+        border: 1px solid var(--gray-300);
       }
     }
 
     h1 {
       font-size: 22px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    @media (prefers-color-scheme: light) {
+      h1 {
+        color: var(--green);
+      }
     }
 
     select, button {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
+      padding: 12px;
+      margin-top: 8px;
       font-size: 16px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    select:focus, button:focus {
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+    }
+
+    @media (prefers-color-scheme: light) {
+      select:focus, button:focus {
+        border-color: var(--green);
+        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+      }
+    }
+
+    button {
+      background-color: var(--orange);
+      color: white;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      button {
+        background-color: var(--green);
+      }
+    }
+
+    button:hover {
+      background-color: var(--orange-dark);
+    }
+
+    @media (prefers-color-scheme: light) {
+      button:hover {
+        background-color: var(--green-light);
+      }
     }
 
     .result {
       margin-top: 20px;
-      padding: 15px;
-      border-radius: 5px;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .alerta {
-      color: red;
+      color: var(--orange);
       font-weight: bold;
     }
 
+    @media (prefers-color-scheme: light) {
+      .alerta {
+        color: #dc2626;
+      }
+    }
+
     .info {
-      font-size: 13px;
-      margin: 15px 0;
-      padding: 10px;
-      background: rgba(0,0,0,0.05);
-      border-left: 3px solid #888;
-      line-height: 1.4;
+      font-size: 14px;
+      margin: 16px 0;
+      padding: 12px;
+      line-height: 1.5;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 24px;
     }
 
     .niveles {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 5px;
+      margin-top: 8px;
       font-size: 12px;
     }
 
     .niveles span {
       padding: 4px 8px;
-      border-radius: 4px;
+      border-radius: 6px;
       white-space: nowrap;
+      font-weight: 500;
     }
 
     pre {
-      font-family: monospace;
+      font-family: 'Menlo', 'Monaco', monospace;
       font-size: 13px;
       line-height: 1.4;
-      background: rgba(0,0,0,0.03);
-      padding: 10px;
+      padding: 12px;
       white-space: pre-wrap;
-      border-radius: 5px;
-      margin-top: 10px;
+      border-radius: 6px;
+      margin-top: 12px;
+      overflow-x: auto;
     }
 
     footer {
-      margin-top: 40px;
-      font-size: 14px;
+      margin-top: auto;
+      padding-top: 24px;
+      font-size: 13px;
       text-align: center;
-      opacity: 0.6;
+      opacity: 0.7;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid;
+      opacity: 0.2;
+      margin: 16px 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .icon-text {
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .scroll-container {
+      max-height: 50vh;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--gray-600);
+      border-radius: 3px;
+    }
+    @media (prefers-color-scheme: light) {
+      ::-webkit-scrollbar-thumb {
+        background: var(--gray-400);
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>Simulador crecida Arroyo Escobar v.1</h1>
+  <h1>Simulador crecida Arroyo Escobar v.2</h1>
 
   <div class="info">
-    ℹ️ <strong>Cómo usar esta app:</strong><br />
+    <span class="icon-text">ℹ️</span> <strong>Cómo usar esta app:</strong><br />
     Ingresá la <strong>hora en que finaliza la lluvia</strong> y la <strong>altura del arroyo</strong> en ese momento. El modelo estima la crecida y posibles afectaciones.<br /><br />
     <strong>Niveles típicos del arroyo:</strong>
     <div class="niveles">
@@ -121,9 +268,10 @@
       <span>2,60 m: medio</span>
       <span>3,10 m: ¾ cauce</span>
       <span>3,60 m: lleno</span>
-        <span>3,70 m+: terrenos ribereños</span>
+      <span>3,70 m+: terrenos ribereños</span>
       <span>4,00 m+: patios/casas</span>
     </div>
+    <br>
     Este modelo es útil <strong>durante la lluvia</strong> como alerta rápida. No calcula acumulación, sino comportamiento del agua ya en crecida.
   </div>
 
@@ -135,9 +283,11 @@
 
   <button onclick="calcular()">Calcular Crecida</button>
 
-  <div class="result" id="salida"></div>
+  <div class="scroll-container">
+    <div class="result" id="salida"></div>
+  </div>
 
-  <footer>Creado por guardianesarroyosba</footer>
+  <footer>Creado por guardianesarroyosba © 🇦🇷</footer>
 
   <script>
     function calcular() {
@@ -166,7 +316,7 @@
       function formatoHora(h) {
         const horas = Math.floor(h);
         const minutos = (h % 1) >= 0.5 ? '30' : '00';
-        return `${horas}:${minutos}`;
+        return `${horas.toString().padStart(2, '0')}:${minutos}`;
       }
 
       function barra(altura) {
@@ -175,14 +325,14 @@
       }
 
       let salida = `
-        <p>🌧️ Hora fin de lluvia: ${formatoHora(horaLluvia)} hs</p>
-        <p>📏 Altura inicial: ${alturaInicial.toFixed(2)} m</p>
-        <p>📈 Altura máxima estimada: ${alturaMaxima.toFixed(2)} m</p>
-        <p>⏱️ Llegará al pico a las ${formatoHora(horaPico)} hs</p>
-        <p>🔽 Comienza a bajar a las ${formatoHora(horaInicioBajada)} hs</p>
-        <p>✅ Nivel vuelve a la normalidad a las ${formatoHora(horaFinBajada)} hs</p>
+        <p><span class="icon-text">🌧️</span> <strong>Hora fin de lluvia:</strong> ${formatoHora(horaLluvia)} hs</p>
+        <p><span class="icon-text">📏</span> <strong>Altura inicial:</strong> ${alturaInicial.toFixed(2)} m</p>
+        <p><span class="icon-text">📈</span> <strong>Altura máxima estimada:</strong> ${alturaMaxima.toFixed(2)} m</p>
+        <p><span class="icon-text">⏱️</span> <strong>Llegará al pico:</strong> ${formatoHora(horaPico)} hs</p>
+        <p><span class="icon-text">🔽</span> <strong>Comienza a bajar:</strong> ${formatoHora(horaInicioBajada)} hs</p>
+        <p><span class="icon-text">✅</span> <strong>Normalidad:</strong> ${formatoHora(horaFinBajada)} hs</p>
         <hr>
-        <p><strong>🔔 Alertas:</strong></p>
+        <p><strong><span class="icon-text">🔔</span> Alertas:</strong></p>
       `;
 
       let alertaEmitida = false;
@@ -191,17 +341,17 @@
         if (alturaMaxima >= p.nivel) {
           const inicio = formatoHora(horaPico);
           const fin = formatoHora((horaPico + 0.5) % 24);
-          salida += `<p class="alerta">⚠️ ${p.nombre} será alcanzada entre las ${inicio} y ${fin} hs</p>`;
+          salida += `<p class="alerta"><span class="icon-text">⚠️</span> ${p.nombre} será alcanzada entre las ${inicio} y ${fin} hs</p>`;
           alertaEmitida = true;
         }
       });
 
       if (!alertaEmitida) {
-        salida += `<p>✅ No se espera que ninguna casa ni la ruta sean alcanzadas.</p>`;
+        salida += `<p><span class="icon-text">✅</span> No se espera que ninguna casa ni la ruta sean alcanzadas.</p>`;
       }
 
       // Evolución simple en bloques visuales (gráfico)
-      salida += `<hr><p><strong>📊 Evolución de altura:</strong></p><pre>`;
+      salida += `<hr><p><strong><span class="icon-text">📊</span> Evolución de altura:</strong></p><pre>`;
 
       const pasos = 6;
       const intervalo = 1;
@@ -214,12 +364,15 @@
       salida += `</pre>`;
 
       document.getElementById('salida').innerHTML = salida;
+      
+      // Scroll suave a los resultados
+      document.getElementById('salida').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     // Cargar opciones al iniciar
     window.onload = () => {
       document.getElementById('horaLluvia').innerHTML =
-        [...Array(24).keys()].map(h => `<option value="${h}">${h}:00 hs</option>`).join('');
+        [...Array(24).keys()].map(h => `<option value="${h}">${h.toString().padStart(2, '0')}:00 hs</option>`).join('');
       document.getElementById('alturaInicial').innerHTML =
         Array.from({length: 53}, (_, i) => (i * 0.1).toFixed(2))
         .map(h => `<option value="${h}">${h} m</option>`).join('');
