@@ -3,301 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador Crecida - Arroyo Escobar v.2</title>
-  <style>
-    :root {
-      --orange: #f97316;
-      --orange-light: #fb923c;
-      --orange-dark: #ea580c;
-      --green: #16a34a;
-      --green-light: #22c55e;
-      --gray-900: #111827;
-      --gray-800: #1f2937;
-      --gray-700: #374151;
-      --gray-600: #4b5563;
-      --gray-300: #d1d5db;
-      --gray-200: #e5e7eb;
-      --gray-100: #f3f4f6;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 16px;
-      max-width: 500px;
-      margin: auto;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: var(--gray-900);
-        color: #f8fafc;
-      }
-      .result {
-        background: var(--gray-800);
-        border: 1px solid var(--gray-700);
-        color: #f8fafc;
-      }
-      .niveles span {
-        background: var(--gray-700);
-        color: var(--orange-light);
-        border: 1px solid var(--gray-600);
-      }
-      select, button {
-        background: var(--gray-800);
-        color: #f8fafc;
-        border: 1px solid var(--gray-600);
-      }
-      .info {
-        background: var(--gray-800);
-        border-left: 3px solid var(--orange);
-      }
-      pre {
-        background: var(--gray-800);
-        border: 1px solid var(--gray-700);
-      }
-    }
-
-    @media (prefers-color-scheme: light) {
-      body {
-        background: var(--gray-100);
-        color: var(--gray-900);
-      }
-      .result {
-        background: white;
-        border: 1px solid var(--gray-300);
-        color: var(--gray-900);
-      }
-      .niveles span {
-        background: var(--gray-100);
-        color: var(--green);
-        border: 1px solid var(--gray-300);
-      }
-      select, button {
-        background: white;
-        color: var(--gray-900);
-        border: 1px solid var(--gray-300);
-      }
-      .info {
-        background: var(--gray-100);
-        border-left: 3px solid var(--green);
-      }
-      pre {
-        background: var(--gray-100);
-        border: 1px solid var(--gray-300);
-      }
-    }
-
-    h1 {
-      font-size: 22px;
-      margin-bottom: 12px;
-      color: var(--orange);
-      font-weight: 600;
-    }
-
-    @media (prefers-color-scheme: light) {
-      h1 {
-        color: var(--green);
-      }
-    }
-
-    select, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 8px;
-      font-size: 16px;
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-
-    select:focus, button:focus {
-      outline: none;
-      border-color: var(--orange);
-      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
-    }
-
-    @media (prefers-color-scheme: light) {
-      select:focus, button:focus {
-        border-color: var(--green);
-        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
-      }
-    }
-
-    button {
-      background-color: var(--orange);
-      color: white;
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
-      margin-top: 16px;
-    }
-
-    @media (prefers-color-scheme: light) {
-      button {
-        background-color: var(--green);
-      }
-    }
-
-    button:hover {
-      background-color: var(--orange-dark);
-    }
-
-    @media (prefers-color-scheme: light) {
-      button:hover {
-        background-color: var(--green-light);
-      }
-    }
-
-    .result {
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .alerta {
-      color: var(--orange);
-      font-weight: bold;
-    }
-
-    @media (prefers-color-scheme: light) {
-      .alerta {
-        color: #dc2626;
-      }
-    }
-
-    .info {
-      font-size: 14px;
-      margin: 16px 0;
-      padding: 12px;
-      line-height: 1.5;
-      border-radius: 0 8px 8px 0;
-      margin-bottom: 24px;
-    }
-
-    .niveles {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
-      font-size: 12px;
-    }
-
-    .niveles span {
-      padding: 4px 8px;
-      border-radius: 6px;
-      white-space: nowrap;
-      font-weight: 500;
-    }
-
-    pre {
-      font-family: 'Menlo', 'Monaco', monospace;
-      font-size: 13px;
-      line-height: 1.4;
-      padding: 12px;
-      white-space: pre-wrap;
-      border-radius: 6px;
-      margin-top: 12px;
-      overflow-x: auto;
-    }
-
-    footer {
-      margin-top: auto;
-      padding-top: 24px;
-      font-size: 13px;
-      text-align: center;
-      opacity: 0.7;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid;
-      opacity: 0.2;
-      margin: 16px 0;
-    }
-
-    label {
-      display: block;
-      margin-top: 16px;
-      font-weight: 500;
-      font-size: 15px;
-    }
-
-    .icon-text {
-      display: inline-block;
-      margin-right: 6px;
-    }
-
-    .scroll-container {
-      max-height: 50vh;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--gray-600);
-      border-radius: 3px;
-    }
-    @media (prefers-color-scheme: light) {
-      ::-webkit-scrollbar-thumb {
-        background: var(--gray-400);
-      }
-    }
-  </style>
-</head>
+  <title>Simulador Compacto – Arroyo Escobar</title>
+  <link rel="stylesheet" href="styles.css">
+  </head>
+  
 <body>
 
-  <h1>Simulador crecida Arroyo Escobar</h1>
+  <h1>Simulador Crecida – Arroyo Escobar</h1>
 
   <div class="info">
-    <span class="icon-text">ℹ️</span> <strong>Cómo usar esta app:</strong><br />
-    Ingresá la <strong>hora en que finaliza la lluvia</strong> y la <strong>altura del arroyo</strong> en ese momento. El modelo estima la crecida y posibles afectaciones.<br /><br />
-    <strong>Niveles típicos del arroyo:</strong>
-    <div class="niveles">
-      <span>1,30 m: normal</span>
-      <span>2,60 m: medio</span>
-      <span>3,10 m: ¾ cauce</span>
-      <span>3,60 m: lleno</span>
-      <span>3,70 m+: terrenos ribereños</span>
-      <span>4,00 m+: patios/casas</span>
-    </div>
-    <br>
-    Este modelo es útil <strong>durante la lluvia</strong> como alerta rápida. No calcula acumulación, sino comportamiento del agua ya en crecida.
-  </div>
+    <strong>ℹ️ Cómo usar:</strong><br>
+  Elegí la <strong>hora fin de lluvia</strong> y la <strong>altura actual</strong> del arroyo.<br>
+  El modelo estima el pico y posibles impactos en casas o calles.<br>
+  Este modelo es útil <strong>durante la lluvia</strong>.<br>
+  No calcula acumulación, solo cómo crece el arroyo.
+  <br><br>
+      <span title="Niveles típicos: Normal: 1,30 m · Medio: 2,60 m · ¾ Cauce: 3,10 m · Lleno: 3,60 m · Terrenos bajos: 3,70 m+ · Casas: 4,00 m+">
+    🔍 Ver niveles referencia del arroyo
+  </span>
+</div>
 
-  <label for="horaLluvia">Hora fin de lluvia:</label>
-  <select id="horaLluvia"></select>
+  <div class="panel">
+    <label for="altura">Altura del arroyo (m):</label>
+    <input type="range" id="altura" min="0" max="5.2" step="0.1" value="2.0" oninput="updateAltura()" />
+    <div class="output" id="alturaValor">2.00 m</div>
 
-  <label for="alturaInicial">Altura del arroyo (m):</label>
-  <select id="alturaInicial"></select>
+    <label>Hora fin de lluvia:</label>
+    <input type="range" id="hora" min="0" max="23" step="1" value="12" oninput="updateHora()" />
+    <div class="output" id="horaValor">12:00 hs</div>
 
-  <button onclick="calcular()">Calcular Crecida</button>
+    <button onclick="calcular()">Calcular Crecida</button>
 
-  <div class="scroll-container">
     <div class="result" id="salida"></div>
   </div>
 
   <footer>Creado por guardianesarroyosba © 🇦🇷</footer>
 
   <script>
-    function calcular() {
-      const horaLluvia = parseFloat(document.getElementById('horaLluvia').value);
-      const alturaInicial = parseFloat(document.getElementById('alturaInicial').value);
+    function updateAltura() {
+      const val = parseFloat(document.getElementById("altura").value).toFixed(2);
+      document.getElementById("alturaValor").innerText = `${val} m`;
+    }
 
-      if (isNaN(horaLluvia) || isNaN(alturaInicial)) {
-        alert("Por favor, complete todos los campos correctamente.");
-        return;
-      }
+    function updateHora() {
+      const val = parseInt(document.getElementById("hora").value);
+      document.getElementById("horaValor").innerText = `${val.toString().padStart(2, "0")}:00 hs`;
+    }
+
+    function calcular() {
+      const alturaInicial = parseFloat(document.getElementById("altura").value);
+      const horaLluvia = parseInt(document.getElementById("hora").value);
 
       const alturaMaxima = alturaInicial + 1;
       const horaPico = (horaLluvia + 9.5) % 24;
@@ -305,7 +60,7 @@
       const horaFinBajada = (horaInicioBajada + 5.5) % 24;
 
       const puntosCriticos = [
-        { nombre: "Terrenos bajos y calles", nivel: 3.70 },
+        { nombre: "Terrenos bajos", nivel: 3.70 },
         { nombre: "Casa 1", nivel: 4.10 },
         { nombre: "Casa 2", nivel: 4.25 },
         { nombre: "Casa 3", nivel: 4.50 },
@@ -320,63 +75,37 @@
       }
 
       function barra(altura) {
-        const bloques = Math.round(altura * 2); // cada 0.5 m = 1 bloque
+        const bloques = Math.round(altura * 2);
         return '🟦'.repeat(bloques);
       }
 
       let salida = `
-        <p><span class="icon-text">🌧️</span> <strong>Hora fin de lluvia:</strong> ${formatoHora(horaLluvia)} hs</p>
-        <p><span class="icon-text">📏</span> <strong>Altura inicial:</strong> ${alturaInicial.toFixed(2)} m</p>
-        <p><span class="icon-text">📈</span> <strong>Altura máxima estimada:</strong> ${alturaMaxima.toFixed(2)} m</p>
-        <p><span class="icon-text">⏱️</span> <strong>Llegará al pico:</strong> ${formatoHora(horaPico)} hs</p>
-        <p><span class="icon-text">🔽</span> <strong>Comienza a bajar:</strong> ${formatoHora(horaInicioBajada)} hs</p>
-        <p><span class="icon-text">✅</span> <strong>Normalidad:</strong> ${formatoHora(horaFinBajada)} hs</p>
-        <hr>
-        <p><strong><span class="icon-text">🔔</span> Alertas:</strong></p>
-      `;
+  <div class="data-grid grid-compacta">
+    <div class="data-box">⏱️<br>Pico<br>${formatoHora(horaPico)}</div>
+    <div class="data-box">🔽<br>Baja<br>${formatoHora(horaInicioBajada)}</div>
+    <div class="data-box">✅<br>Normal<br>${formatoHora(horaFinBajada)}</div>
+    <div class="data-box">📏<br>Inicial<br>${alturaInicial.toFixed(2)} m</div>
+    <div class="data-box">📈<br>Máxima<br>${alturaMaxima.toFixed(2)} m</div>
+  </div>`;
 
-      let alertaEmitida = false;
 
-      puntosCriticos.forEach(p => {
-        if (alturaMaxima >= p.nivel) {
-          const inicio = formatoHora(horaPico);
-          const fin = formatoHora((horaPico + 0.5) % 24);
-          salida += `<p class="alerta"><span class="icon-text">⚠️</span> ${p.nombre} será alcanzada entre las ${inicio} y ${fin} hs</p>`;
-          alertaEmitida = true;
-        }
-      });
+      const afectados = puntosCriticos.filter(p => alturaMaxima >= p.nivel).map(p => p.nombre);
+      salida += `<div class="alerta">🔔 ${
+        afectados.length
+          ? `Posible afectación: ${afectados.join(', ')}`
+          : '✅ No se espera afectación'
+      }</div>`;
 
-      if (!alertaEmitida) {
-        salida += `<p><span class="icon-text">✅</span> No se espera que ninguna casa ni la ruta sean alcanzadas.</p>`;
-      }
+      salida += `<div class="evolucion">📊 Evolución: ${barra(alturaMaxima)} ${alturaMaxima.toFixed(2)} m</div>`;
 
-      // Evolución simple en bloques visuales (gráfico)
-      salida += `<hr><p><strong><span class="icon-text">📊</span> Evolución de altura:</strong></p><pre>`;
-
-      const pasos = 6;
-      const intervalo = 1;
-      for (let i = 0; i <= pasos; i++) {
-        const hora = (horaPico - 1.5 + i * 0.5 + 24) % 24;
-        const altura = alturaInicial + Math.max(0, 1 - Math.abs(i - pasos / 2) * 0.4);
-        salida += `${formatoHora(hora)} → ${barra(altura)} ${altura.toFixed(2)} m\n`;
-      }
-
-      salida += `</pre>`;
-
-      document.getElementById('salida').innerHTML = salida;
-      
-      // Scroll suave a los resultados
-      document.getElementById('salida').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      document.getElementById("salida").innerHTML = salida;
     }
 
-    // Cargar opciones al iniciar
     window.onload = () => {
-      document.getElementById('horaLluvia').innerHTML =
-        [...Array(24).keys()].map(h => `<option value="${h}">${h.toString().padStart(2, '0')}:00 hs</option>`).join('');
-      document.getElementById('alturaInicial').innerHTML =
-        Array.from({length: 53}, (_, i) => (i * 0.1).toFixed(2))
-        .map(h => `<option value="${h}">${h} m</option>`).join('');
+      updateAltura();
+      updateHora();
     };
   </script>
+
 </body>
 </html>
