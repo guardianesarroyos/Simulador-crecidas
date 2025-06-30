@@ -5,26 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simulador Compacto – Arroyo Escobar</title>
   <link rel="stylesheet" href="styles.css">
-  </head>
-  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icons-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icons-512.png">
+  <meta name="theme-color" content="#1976d2">
+  <link rel="apple-touch-icon" href="icons/icons-192.png">
+  <!-- Puedes agregar más tamaños si lo deseas -->
+</head>
 <body>
 
   <h1>Simulador Crecida – Arroyo Escobar</h1>
 
   <div class="info">
     <strong>ℹ️ Cómo usar:</strong><br>
-  Elegí la <strong>hora fin de lluvia</strong> y la <strong>altura actual</strong> del arroyo.<br>
-  El modelo estima el pico y posibles impactos en casas o calles.<br>
-  Este modelo es útil <strong>durante la lluvia</strong>.<br>
-  No calcula acumulación, solo cómo crece el arroyo.
-  <br><br>
-      <span title="Niveles típicos: Normal: 1,30 m · Medio: 2,60 m · ¾ Cauce: 3,10 m · Lleno: 3,60 m · Terrenos bajos: 3,70 m+ · Casas: 4,00 m+">
-    🔍 Ver niveles referencia del arroyo
-  </span>
-</div>
+    Elegí la <strong>hora fin de lluvia</strong> y la <strong>altura actual</strong> del arroyo.<br>
+    El modelo estima el pico y posibles impactos en casas o calles.<br>
+    Este modelo es útil <strong>durante la lluvia</strong>.<br>
+    No calcula acumulación, solo cómo crece el arroyo.
+    <br><br>
+    <span title="Niveles típicos: Normal: 1,30 m · Medio: 2,60 m · ¾ Cauce: 3,10 m · Lleno: 3,60 m · Terrenos bajos: 3,70 m+ · Casas: 4,00 m+">
+      🔍 Ver niveles del arroyo
+    </span>
+  </div>
 
   <div class="panel">
-    <label for="altura">Altura del arroyo (m):</label>
+    <label>Altura del arroyo (m):</label>
     <input type="range" id="altura" min="0" max="5.2" step="0.1" value="2.0" oninput="updateAltura()" />
     <div class="output" id="alturaValor">2.00 m</div>
 
@@ -80,14 +85,13 @@
       }
 
       let salida = `
-  <div class="data-grid grid-compacta">
-    <div class="data-box">⏱️<br>Pico<br>${formatoHora(horaPico)}</div>
-    <div class="data-box">🔽<br>Baja<br>${formatoHora(horaInicioBajada)}</div>
-    <div class="data-box">✅<br>Normal<br>${formatoHora(horaFinBajada)}</div>
-    <div class="data-box">📏<br>Inicial<br>${alturaInicial.toFixed(2)} m</div>
-    <div class="data-box">📈<br>Máxima<br>${alturaMaxima.toFixed(2)} m</div>
-  </div>`;
-
+        <div class="data-grid grid-compacta">
+          <div class="data-box">⏱️<br>Pico<br>${formatoHora(horaPico)}</div>
+          <div class="data-box">🔽<br>Baja<br>${formatoHora(horaInicioBajada)}</div>
+          <div class="data-box">✅<br>Normal<br>${formatoHora(horaFinBajada)}</div>
+          <div class="data-box">📏<br>Inicial<br>${alturaInicial.toFixed(2)} m</div>
+          <div class="data-box">📈<br>Máxima<br>${alturaMaxima.toFixed(2)} m</div>
+        </div>`;
 
       const afectados = puntosCriticos.filter(p => alturaMaxima >= p.nivel).map(p => p.nombre);
       salida += `<div class="alerta">🔔 ${
@@ -99,6 +103,13 @@
       salida += `<div class="evolucion">📊 Evolución: ${barra(alturaMaxima)} ${alturaMaxima.toFixed(2)} m</div>`;
 
       document.getElementById("salida").innerHTML = salida;
+    }
+
+    // Registro del service worker para PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
     }
 
     window.onload = () => {

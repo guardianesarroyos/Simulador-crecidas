@@ -1,0 +1,22 @@
+{
+  "name": "Simulador Crecida – Arroyo Escobar",
+  "short_name": "Simulador Crecida",
+  "description": "Simulador compacto para estimar crecidas del Arroyo Escobar durante lluvias.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1976d2",
+  "theme_color": "#1976d2",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "icons/icons-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icons-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
