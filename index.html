@@ -180,31 +180,40 @@
 </head>
 <body>
 
-  <h1>ALERTA DE CRECIDA</h1>
+  <h1>ALERTA CRECIDA - Arroyo Escobar</h1>
 
-  <!-- Burbuja 1: Instrucciones -->
-  <div class="burbuja">
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-      <div style="font-size: 1.4rem;">📋</div>
-      <h2 style="margin: 0; font-size: 1.2rem; color: var(--color-alerta);">Cómo usar esta alerta</h2>
-    </div>
-    <div class="instrucciones-grid">
+  <!-- Burbuja 1: Instrucciones COMPACTAS -->
+<div class="burbuja">
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+    <div style="font-size: 1.4rem;">📋</div>
+    <h2 style="margin: 0; font-size: 1.2rem; color: var(--color-alerta);">Cómo usar esta alerta</h2>
+  </div>
+  
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+    <!-- Fila 1 -->
+    <div style="display: flex; align-items: center; gap: 6px;">
       <div style="font-weight: bold; color: var(--color-primario);">1.</div>
-      <div>Selecciona una referencia visual del arroyo</div>
-      
+      <div style="font-size: 0.9rem;">Seleccionar referencia</div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 6px;">
       <div style="font-weight: bold; color: var(--color-primario);">2.</div>
-      <div>Ajusta la hora de fin de lluvia</div>
-      
+      <div style="font-size: 0.9rem;">Ajustar hora fin lluvia</div>
+    </div>
+    
+    <!-- Fila 2 -->
+    <div style="display: flex; align-items: center; gap: 6px;">
       <div style="font-weight: bold; color: var(--color-primario);">3.</div>
-      <div>Presiona "Calcular riesgo"</div>
-      
+      <div style="font-size: 0.9rem;">Calcular riesgo</div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 6px;">
       <div style="color: var(--color-alerta);">⚠️</div>
-      <div style="font-size: 0.9rem;">
-        <strong>Modelo predictivo:</strong> Proyección basada en lluvias intensas
-      </div>
+      <div style="font-size: 0.85rem;">Para lluvias intensas</div>
     </div>
   </div>
-
+</div>
+      
   <!-- Burbuja 2: Selector de nivel visual -->
   <div class="burbuja">
     <div class="niveles-container">
@@ -214,7 +223,7 @@
         <div class="nivel-option" data-value="3.1">¾ Cauce 3.1m</div>
       </div>
       <div class="fila-niveles">
-        <div class="nivel-option" data-value="3.6">Lleno 3.6m</div>
+        <div class="nivel-option" data-value="3.6">Cauce Lleno 3.6m</div>
         <div class="nivel-option" data-value="3.7">Terrenos bajos 3.7m</div>
         <div class="nivel-option" data-value="4.0">Nivel casas 4.0m</div>
       </div>
