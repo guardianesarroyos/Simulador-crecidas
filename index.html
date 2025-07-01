@@ -15,18 +15,75 @@
 <body>
 
   <h1>Simulador Crecida – Arroyo Escobar</h1>
-
-  <div class="info">
+<div class="info">
     <strong>ℹ️ Cómo usar:</strong><br>
     Elegí la <strong>hora fin de lluvia</strong> y la <strong>altura actual</strong> del arroyo.<br>
     El modelo estima el pico y posibles impactos en casas o calles.<br>
     Este modelo es útil <strong>durante la lluvia</strong>.<br>
     No calcula acumulación, solo cómo crece el arroyo.
     <br><br>
-    <span title="Niveles típicos: Normal: 1,30 m · Medio: 2,60 m · ¾ Cauce: 3,10 m · Lleno: 3,60 m · Terrenos bajos: 3,70 m+ · Casas: 4,00 m+">
-      🔍 Ver niveles del arroyo
-    </span>
+  <style>
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.tooltip-trigger {
+  cursor: pointer;
+  user-select: none;
+  color: #0077cc;
+  text-decoration: underline;
+}
+
+.tooltip-box {
+  display: none;
+  position: absolute;
+  top: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  white-space: normal;
+  max-width: 300px;
+  font-size: 14px;
+  z-index: 1000;
+}
+
+.tooltip-wrapper:hover .tooltip-box {
+  display: block;
+}
+
+.tooltip-box.visible {
+  display: block;
+}
+</style>
+
+<div class="tooltip-wrapper" id="tooltipWrapper">
+  <span class="tooltip-trigger" onclick="toggleTooltip()">ℹ️ Ver niveles del arroyo</span>
+  <div class="tooltip-box" id="tooltipBox">
+    Niveles típicos: Normal: 1,30 m · Medio: 2,60 m · ¾ Cauce: 3,10 m · Lleno: 3,60 m · Terrenos bajos: 3,70 m+ · Casas: 4,00 m+
   </div>
+</div>
+
+<script>
+function toggleTooltip() {
+  const tooltip = document.getElementById("tooltipBox");
+  tooltip.classList.toggle("visible");
+}
+
+// Cerrar si se toca fuera en móvil
+document.addEventListener("click", function(event) {
+  const wrapper = document.getElementById("tooltipWrapper");
+  const tooltip = document.getElementById("tooltipBox");
+  if (!wrapper.contains(event.target)) {
+    tooltip.classList.remove("visible");
+  }
+});
+</script>
+
 
   <div class="panel">
     <label>Altura del arroyo (m):</label>
