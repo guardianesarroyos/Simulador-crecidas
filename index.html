@@ -3,177 +3,328 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador Compacto – Arroyo Escobar</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icons-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icons-512.png">
-  <meta name="theme-color" content="#1976d2">
-  <link rel="apple-touch-icon" href="icons/icons-192.png">
-  <!-- Puedes agregar más tamaños si lo deseas -->
+  <title>🚨 Alerta Crecida - Arroyo Escobar</title>
+  <meta name="theme-color" content="#d32f2f">
+  <style>
+    :root {
+      --color-alerta: #d32f2f;
+      --color-primario: #1976d2;
+      --color-fondo: rgba(255, 255, 255, 0.20); /* opacidad */
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    h1 {
+      color: var(--color-alerta);
+      text-align: center;
+      font-size: 1.6rem;
+      margin: 0.5rem 0;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    
+    .burbuja {
+      background-color: var(--color-fondo);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(3px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    /* Estilo específico para la burbuja de instrucciones */
+    .instrucciones-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px 12px;
+      align-items: center;
+    }
+
+    /* Selector de niveles */
+    .niveles-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    
+    .fila-niveles {
+      display: flex;
+      width: 100%;
+      gap: 10px;
+    }
+    
+    .nivel-option {
+      background-color: rgba(245, 245, 245, 0.65);
+      border: 1px solid rgba(200, 200, 200, 0.7);
+      border-radius: 10px;
+      padding: 10px 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-align: center;
+      flex: 1;
+      white-space: nowrap;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-weight: 500;
+    }
+    
+    /* Sliders */
+    .slider-container {
+      margin: 18px 0;
+    }
+    
+    input[type="range"] {
+      width: 100%;
+      margin: 8px 0;
+      background: rgba(200, 200, 200, 0.1);
+      height: 7px;
+      border-radius: 4px;
+      -webkit-appearance: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--color-primario);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .output {
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.2rem;
+      margin: 8px 0;
+      color: #222;
+    }
+    
+    /* Botón */
+    button {
+      background-color: rgba(211, 47, 47, 0.90);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 12px;
+      font-size: 1.05rem;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+    
+    /* Resultados */
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 10px;
+      margin: 18px 0;
+    }
+    
+    .data-box {
+      background-color: rgba(245, 245, 245, 0.95);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 0.95rem;
+      border: 1px solid rgba(200, 200, 200, 0.6);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .alerta {
+      background-color: rgba(255, 235, 238, 0.95);
+      padding: 14px;
+      border-radius: 10px;
+      margin: 18px 0;
+      font-weight: bold;
+      border: 1px solid rgba(255, 192, 203, 0.7);
+      font-size: 1rem;
+      text-align: center;
+    }
+    
+    .alerta-emergencia {
+      animation: pulse 1.5s infinite;
+      background-color: rgba(255, 205, 210, 0.95);
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: auto;
+      padding: 15px 0 5px;
+      font-size: 0.8rem;
+      color: rgba(0,0,0,0.7);
+    }
+  </style>
 </head>
 <body>
 
-  <h1>Simulador Crecida – Arroyo Escobar</h1>
-<div class="info">
-    <strong>ℹ️ Cómo usar:</strong><br>
-    Elegí la <strong>hora fin de lluvia</strong> y la <strong>altura actual</strong> del arroyo.<br>
-    El modelo estima el pico y posibles impactos en casas o calles.<br>
-    Este modelo es útil <strong>durante la lluvia</strong>.<br>
-    No calcula acumulación, solo cómo crece el arroyo.
-    <br><br>
-  <style>
-.tooltip-wrapper {
-  position: relative;
-  display: inline-block;
-  font-size: 16px;
-}
+  <h1>ALERTA DE CRECIDA</h1>
 
-.tooltip-trigger {
-  cursor: pointer;
-  user-select: none;
-  color: #0077cc;
-  text-decoration: underline;
-}
-
-.tooltip-box {
-  display: none;
-  position: absolute;
-  top: 130%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 6px;
-  white-space: normal;
-  max-width: 300px;
-  font-size: 14px;
-  z-index: 1000;
-}
-
-.tooltip-wrapper:hover .tooltip-box {
-  display: block;
-}
-
-.tooltip-box.visible {
-  display: block;
-}
-</style>
-
-<div class="tooltip-wrapper" id="tooltipWrapper">
-  <span class="tooltip-trigger" onclick="toggleTooltip()">ℹ️ Ver niveles del arroyo</span>
-  <div class="tooltip-box" id="tooltipBox">
-    Niveles típicos: Normal: 1,30 m · Medio: 2,60 m · ¾ Cauce: 3,10 m · Lleno: 3,60 m · Terrenos bajos: 3,70 m+ · Casas: 4,00 m+
-  </div>
-</div>
-
-<script>
-function toggleTooltip() {
-  const tooltip = document.getElementById("tooltipBox");
-  tooltip.classList.toggle("visible");
-}
-
-// Cerrar si se toca fuera en móvil
-document.addEventListener("click", function(event) {
-  const wrapper = document.getElementById("tooltipWrapper");
-  const tooltip = document.getElementById("tooltipBox");
-  if (!wrapper.contains(event.target)) {
-    tooltip.classList.remove("visible");
-  }
-});
-</script>
-
-
-  <div class="panel">
-    <label>Altura del arroyo (m):</label>
-    <input type="range" id="altura" min="0" max="5.2" step="0.1" value="2.0" oninput="updateAltura()" />
-    <div class="output" id="alturaValor">2.00 m</div>
-
-    <label>Hora fin de lluvia:</label>
-    <input type="range" id="hora" min="0" max="23" step="1" value="12" oninput="updateHora()" />
-    <div class="output" id="horaValor">12:00 hs</div>
-
-    <button onclick="calcular()">Calcular Crecida</button>
-
-    <div class="result" id="salida"></div>
+  <!-- Burbuja 1: Instrucciones -->
+  <div class="burbuja">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+      <div style="font-size: 1.4rem;">📋</div>
+      <h2 style="margin: 0; font-size: 1.2rem; color: var(--color-alerta);">Cómo usar esta alerta</h2>
+    </div>
+    <div class="instrucciones-grid">
+      <div style="font-weight: bold; color: var(--color-primario);">1.</div>
+      <div>Selecciona una referencia visual del arroyo</div>
+      
+      <div style="font-weight: bold; color: var(--color-primario);">2.</div>
+      <div>Ajusta la hora de fin de lluvia</div>
+      
+      <div style="font-weight: bold; color: var(--color-primario);">3.</div>
+      <div>Presiona "Calcular riesgo"</div>
+      
+      <div style="color: var(--color-alerta);">⚠️</div>
+      <div style="font-size: 0.9rem;">
+        <strong>Modelo predictivo:</strong> Proyección basada en lluvias intensas
+      </div>
+    </div>
   </div>
 
-  <footer>Creado por guardianesarroyosba © 🇦🇷</footer>
+  <!-- Burbuja 2: Selector de nivel visual -->
+  <div class="burbuja">
+    <div class="niveles-container">
+      <div class="fila-niveles">
+        <div class="nivel-option" data-value="1.3">Normal 1.3m</div>
+        <div class="nivel-option" data-value="2.6">Medio 2.6m</div>
+        <div class="nivel-option" data-value="3.1">¾ Cauce 3.1m</div>
+      </div>
+      <div class="fila-niveles">
+        <div class="nivel-option" data-value="3.6">Lleno 3.6m</div>
+        <div class="nivel-option" data-value="3.7">Terrenos bajos 3.7m</div>
+        <div class="nivel-option" data-value="4.0">Nivel casas 4.0m</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Burbuja 3: Configuración -->
+  <div class="burbuja">
+    <div class="slider-container">
+      <label>Altura actual del arroyo:</label>
+      <input type="range" id="altura" min="0" max="5.2" step="0.1" value="2.0" oninput="updateAltura()" />
+      <div class="output" id="alturaValor">2.0 m</div>
+    </div>
+    
+    <div class="slider-container">
+      <label>Hora estimada de fin de lluvia:</label>
+      <input type="range" id="hora" min="0" max="23" step="1" value="12" oninput="updateHora()" />
+      <div class="output" id="horaValor">12:00 hs</div>
+    </div>
+    
+    <button onclick="calcular()">CALCULAR RIESGO</button>
+  </div>
+
+  <!-- Burbuja 4: Resultados -->
+  <div class="burbuja" id="resultadosContainer" style="display:none;">
+    <div id="salida"></div>
+  </div>
+
+  <footer>
+    Creado por guardianesarroyosba © 🇦🇷<br>
+    Para uso comunitario
+  </footer>
 
   <script>
+    // Determinar fondo día/noche
+    function actualizarFondo() {
+      const horaActual = new Date().getHours();
+      const esDeDia = horaActual >= 6 && horaActual < 18;
+      document.body.style.backgroundImage = `url(${esDeDia ? 'puenterosa_dia.png' : 'puenterosa_noche.png'})`;
+    }
+    
+    // Actualizar valores
     function updateAltura() {
-      const val = parseFloat(document.getElementById("altura").value).toFixed(2);
-      document.getElementById("alturaValor").innerText = `${val} m`;
+      const val = parseFloat(document.getElementById("altura").value).toFixed(1);
+      document.getElementById("alturaValor").textContent = val + " m";
     }
 
     function updateHora() {
       const val = parseInt(document.getElementById("hora").value);
-      document.getElementById("horaValor").innerText = `${val.toString().padStart(2, "0")}:00 hs`;
+      document.getElementById("horaValor").textContent = val.toString().padStart(2, '0') + ":00 hs";
     }
 
-    function calcular() {
-      const alturaInicial = parseFloat(document.getElementById("altura").value);
-      const horaLluvia = parseInt(document.getElementById("hora").value);
-
-      const alturaMaxima = alturaInicial + 1;
-      const horaPico = (horaLluvia + 9.5) % 24;
-      const horaInicioBajada = (horaPico + 0.5) % 24;
-      const horaFinBajada = (horaInicioBajada + 5.5) % 24;
-
-      const puntosCriticos = [
-        { nombre: "Terrenos bajos", nivel: 3.70 },
-        { nombre: "Casa 1", nivel: 4.10 },
-        { nombre: "Casa 2", nivel: 4.25 },
-        { nombre: "Casa 3", nivel: 4.50 },
-        { nombre: "Casa 4", nivel: 4.80 },
-        { nombre: "Ruta 9", nivel: 5.20 }
-      ];
-
-      function formatoHora(h) {
-        const horas = Math.floor(h);
-        const minutos = (h % 1) >= 0.5 ? '30' : '00';
-        return `${horas.toString().padStart(2, '0')}:${minutos}`;
-      }
-
-      function barra(altura) {
-        const bloques = Math.round(altura * 2);
-        return '🟦'.repeat(bloques);
-      }
-
-      let salida = `
-        <div class="data-grid grid-compacta">
-          <div class="data-box">⏱️<br>Pico<br>${formatoHora(horaPico)}</div>
-          <div class="data-box">🔽<br>Baja<br>${formatoHora(horaInicioBajada)}</div>
-          <div class="data-box">✅<br>Normal<br>${formatoHora(horaFinBajada)}</div>
-          <div class="data-box">📏<br>Inicial<br>${alturaInicial.toFixed(2)} m</div>
-          <div class="data-box">📈<br>Máxima<br>${alturaMaxima.toFixed(2)} m</div>
-        </div>`;
-
-      const afectados = puntosCriticos.filter(p => alturaMaxima >= p.nivel).map(p => p.nombre);
-      salida += `<div class="alerta">🔔 ${
-        afectados.length
-          ? `Posible afectación: ${afectados.join(', ')}`
-          : '✅ No se espera afectación'
-      }</div>`;
-
-      salida += `<div class="evolucion">📊 Evolución: ${barra(alturaMaxima)} ${alturaMaxima.toFixed(2)} m</div>`;
-
-      document.getElementById("salida").innerHTML = salida;
-    }
-
-    // Registro del service worker para PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js');
+    // Selección de niveles
+    document.querySelectorAll('.nivel-option').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.nivel-option').forEach(opt => opt.classList.remove('selected'));
+        this.classList.add('selected');
+        const value = this.getAttribute('data-value');
+        document.getElementById("altura").value = value;
+        updateAltura();
       });
+    });
+
+    // Cálculo de resultados
+    function calcular() {
+      const altura = parseFloat(document.getElementById("altura").value);
+      const hora = parseInt(document.getElementById("hora").value);
+      
+      // Cálculos
+      const pico = (hora + 9) % 24;
+      const maxima = (altura + 1).toFixed(1);
+      
+      // Determinar riesgo
+      let riesgo = "";
+      let claseAlerta = "";
+      if (altura >= 4.0) {
+        riesgo = "🚨 ALERTA ROJA - Riesgo de inundación alto. Considerar evacuación.";
+        claseAlerta = "alerta-emergencia";
+      } else if (altura >= 3.7) {
+        riesgo = "⚠️ ALERTA AMARILLA - Preparar medidas preventivas. Monitorear constantemente.";
+        claseAlerta = "alerta-emergencia";
+      } else if (altura >= 3.1) {
+        riesgo = "🔶 PRECAUCIÓN - El arroyo está creciendo. Mantenerse alerta.";
+      } else {
+        riesgo = "✅ SITUACIÓN CONTROLADA - El arroyo está dentro de niveles normales.";
+      }
+      
+      // Mostrar resultados
+      document.getElementById("salida").innerHTML = `
+        <div class="data-grid">
+          <div class="data-box">Hora pico<br><strong>${pico}:00 hs</strong></div>
+          <div class="data-box">Altura máxima<br><strong>${maxima} m</strong></div>
+          <div class="data-box">Altura actual<br><strong>${altura.toFixed(1)} m</strong></div>
+        </div>
+        <div class="alerta ${claseAlerta}">${riesgo}</div>
+      `;
+      
+      document.getElementById("resultadosContainer").style.display = "block";
+      document.getElementById("resultadosContainer").scrollIntoView({ behavior: 'smooth' });
     }
 
-    window.onload = () => {
+    // Inicialización
+    window.onload = function() {
+      actualizarFondo();
       updateAltura();
       updateHora();
+      
+      // Actualizar fondo cada hora
+      setInterval(actualizarFondo, 3600000);
     };
   </script>
-
 </body>
 </html>
